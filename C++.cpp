@@ -26,39 +26,51 @@ bool check(string notation) {
 		char col = notation[4];
 		char row = notation[5];
 
-		if (col > 8 || row > 8 || col < 1 || row < 1) {
+		// Convert row characters to integers
+		int from_row_int = from_row - '0';
+		int row_int = row - '0';
+
+		if (grid[col] > 7 || row_int > 8 || grid[col] < 0 || row_int < 1) {
 			return false;
 		}
 
 		if (piece == 'Q') {
-			if ((from_col == col) && (from_row != row) || (from_col != col) && (from_row == row) || (abs(grid[from_col] - grid[col]) == abs(from_row - row))) {
+			// Queen logic: horizontal, vertical, or diagonal moves
+			if ((from_col == col && from_row != row) ||
+				(from_col != col && from_row == row) ||
+				(abs(grid[from_col] - grid[col]) == abs(from_row_int - row_int))) {
 				return true;
 			}
-		} else if (piece == 'R') {
-			if ((from_col == col) && (from_row != row) || (from_col != col) && (from_row == row)) {
+		}
+		else if (piece == 'R') {
+			// Rook logic: horizontal or vertical moves
+			if ((from_col == col && from_row != row) ||
+				(from_col != col && from_row == row)) {
 				return true;
 			}
-		} else if (piece == 'B') {
-			if (abs(grid[from_col] - grid[col]) == abs(from_row - row)) {
+		}
+		else if (piece == 'B') {
+			// Bishop logic: diagonal moves
+			if (abs(grid[from_col] - grid[col]) == abs(from_row_int - row_int)) {
 				return true;
 			}
-		} else if (piece == 'N') {
-
+		}
+		else if (piece == 'N') {
+			// Knight logic: "L" shape moves
+			if ((abs(grid[from_col] - grid[col]) == 2 && abs(from_row_int - row_int) == 1) ||
+				(abs(grid[from_col] - grid[col]) == 1 && abs(from_row_int - row_int) == 2)) {
+				return true;
+			}
 		}
 		else if (piece == 'K') {
-			if (abs(grid[from_col] - grid[col]) <= 1 && abs(from_row - row) <= 1) {
+			// King logic: move one square in any direction
+			if (abs(grid[from_col] - grid[col]) <= 1 && abs(from_row_int - row_int) <= 1) {
 				return true;
 			}
 		}
-	} else if (notation.size() == 5) {
-		char side = notation[0];
-		char from_col = notation[1];
-		char from_row = notation[2];
-		char col = notation[3];
-		char row = notation[4];
 	}
-	else {
-		return false;
+	else if (notation.size() == 5) {
+
 	}
 
 	return false;
